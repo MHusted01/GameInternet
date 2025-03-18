@@ -1,6 +1,3 @@
-import java.util.*;
-import java.util.List;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -10,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 
 public class Gui extends Application {
@@ -105,7 +101,7 @@ public class Gui extends Application {
 			});
 			
             // Putting default players on screen
-			for (int i=0;i<GameLogic.players.size();i++) {
+			for (int i = 0; i< GameLogic.players.size(); i++) {
 			  fields[GameLogic.players.get(i).getXpos()][GameLogic.players.get(i).getYpos()].setGraphic(new ImageView(hero_up));
 			}
 			scoreList.setText(getScoreList());
@@ -156,15 +152,16 @@ public class Gui extends Application {
 	public void playerMoved(int delta_x, int delta_y, String direction) {
 		GameLogic.updatePlayer(App.me,delta_x,delta_y,direction);
 		updateScoreTable();
+
 	}
 	
 	public String getScoreList() {
-		StringBuffer b = new StringBuffer(100);
-		for (Player p : GameLogic.players) {
-			b.append(p+"\r\n");
-		}
-		return b.toString();
-	}
+//		StringBuffer b = new StringBuffer(100);
+//		for (Player p : GameLogic.players) {
+//			b.append(p+"\r\n");
+//		}
+//		return b.toString();
+	return "";}
 
 
 

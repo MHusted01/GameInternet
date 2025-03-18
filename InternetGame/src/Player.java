@@ -37,6 +37,11 @@ public class Player {
 	public void setDirection(String direction) {
 		this.direction = direction;
 	}
+
+	public String getName() {
+		return name;
+	}
+
 	public void addPoints(int p) {
 		point+=p;
 	}

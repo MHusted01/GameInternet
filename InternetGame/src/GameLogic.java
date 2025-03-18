@@ -44,7 +44,7 @@ public static List<Player> players = new ArrayList<Player>();
 		return p;
 	}
 	
-	public static void updatePlayer(Player me,int delta_x, int delta_y, String direction)
+	public static void updatePlayer(Player me, int delta_x, int delta_y, String direction)
 	{
 		me.direction = direction;
 		int x = me.getXpos(),y = me.getYpos();
@@ -62,12 +62,12 @@ public static List<Player> players = new ArrayList<Player>();
               pair pa = getRandomFreePosition();
               p.setLocation(pa);
               pair oldpos = new pair(x+delta_x,y+delta_y);
-              Gui.movePlayerOnScreen(oldpos,pa,p.direction);
+              //Gui.movePlayerOnScreen(oldpos,pa,p.direction);
 			} else 
 				me.addPoints(1);
 			pair oldpos = me.getLocation();
 			pair newpos = new pair(x+delta_x,y+delta_y); 
-			Gui.movePlayerOnScreen(oldpos,newpos,direction);
+			//Gui.movePlayerOnScreen(oldpos,newpos,direction);
 			me.setLocation(newpos);
 		}
 		
