@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class ClientThread extends Thread{
@@ -24,7 +25,6 @@ public class ClientThread extends Thread{
             String startMessage = inFromServer.readLine();
             System.out.println(startMessage);
             while(true){
-
                 // Gennemløb JSON og skab Arrayliste med personer ud fra JSON
                 players = new ArrayList<Player>();
                 JSONObject jo = new JSONObject(inFromServer.readLine());
@@ -34,9 +34,10 @@ public class ClientThread extends Thread{
                     Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"));
                     players.add(p);
                 };
+                System.out.println("Modtaget JSON fra server:");
                 // testudskrigt af den skabte Arraylist
                 for (int i = 0; i < players.size(); i++) {
-                    System.out.println(players.get(i).getName() + "   " + players.get(i).getLocation()+ "    " + players.get(i).getDirection());
+                    System.out.println(players.get(i).getName() + "   " + players.get(i).getLocation()+ "    " + players.get(i).getDirection() +  "   " + players.get(i).getPoint());
                 }
             }
         }

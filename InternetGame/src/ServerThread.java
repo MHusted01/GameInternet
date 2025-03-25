@@ -30,13 +30,16 @@ public class ServerThread extends Thread{
 			// Do the work and the communication with the client here	
 			// The following two lines are only an example
 			while(connSocket.isConnected()) {
+				sleep(10000);
 				System.out.println("Sender update til clients");
 				updateClients();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
-		// do the work here
+		} catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        // do the work here
 	}
 	public void updateClients() throws IOException {
 		// lav en arraylist med 3 personer
@@ -49,6 +52,7 @@ public class ServerThread extends Thread{
 			jo.put("x", GameLogic.players.get(i).getXpos());
 			jo.put("y", GameLogic.players.get(i).getYpos());
 			jo.put("direction",GameLogic.players.get(i).getDirection());
+			jo.put("point", GameLogic.players.get(i).getPoint());
 			jarr.put(jo);
 		}
 		JSONObject jo2 = new JSONObject();

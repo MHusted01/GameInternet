@@ -37,8 +37,6 @@ public class Gui extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			
-			
 			GridPane grid = new GridPane();
 			grid.setHgap(10);
 			grid.setVgap(10);
@@ -140,8 +138,6 @@ public class Gui extends Application {
 		removePlayerOnScreen(oldpos);
 		placePlayerOnScreen(newpos,direction);
 	}
-	
-
 	
 	public void updateScoreTable()
 	{
