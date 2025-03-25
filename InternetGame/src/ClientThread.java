@@ -41,8 +41,8 @@ public class ClientThread extends Thread{
                 };
                 for (Player p : players){
                     Gui.placePlayerOnScreen(p.location,p.direction);
+                    Gui.updateScoreTable();
                 }
-                Gui.updateScoreTable();
 
             }
         }
