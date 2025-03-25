@@ -30,7 +30,7 @@ public class ServerThread extends Thread{
 			// Do the work and the communication with the client here	
 			// The following two lines are only an example
 			while(connSocket.isConnected()) {
-				sleep(1000);
+				sleep(2000);
 				System.out.println("Sender update til clients");
 				updateClients();
 			}
@@ -64,12 +64,8 @@ public class ServerThread extends Thread{
 
 		// lav forbindelse til server og send den skabte JSON
 		for (DataOutputStream c : clients){
-			c.writeBytes(s + '\n');
+			outToClient.writeBytes(s + '\n');
 		}
 
-	}
-
-	public static ArrayList<Player> getPlayers() {
-		return players;
 	}
 }

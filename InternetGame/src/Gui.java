@@ -142,18 +142,24 @@ public class Gui extends Application {
 	public static void updateScoreTable()
 	{
 		Platform.runLater(() -> {
+			scoreList.clear();
 			scoreList.setText(getScoreList());
 			});
 	}
 	public void playerMoved(int delta_x, int delta_y, String direction) {
-		//GameLogic.updatePlayer(delta_x,delta_y,direction);
-		updateScoreTable();
-	}
 
+
+
+		//GameLogic.updatePlayer(delta_x,delta_y,direction);
+		//updateScoreTable();
+
+	}
+	
 	public static String getScoreList() {
 		StringBuffer b = new StringBuffer(100);
-		for (Player p : ClientThread.players) {
-			b.append(p.getName() + ": " + p.getPoint() + "\r\n");
+		System.out.println(ClientThread.getPlayers().toString());
+		for (Player p : ClientThread.getPlayers()) {
+			b.append(p+"\r\n");
 		}
 		return b.toString();
 	}
