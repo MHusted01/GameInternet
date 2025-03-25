@@ -15,8 +15,8 @@ public class ServerThread extends Thread{
 	public ServerThread(Socket connSocket) throws IOException {
 		this.connSocket = connSocket;
 		this.outToClient = new DataOutputStream(connSocket.getOutputStream());
-		clients.add(outToClient);
 	}
+
 	public void run() {
 		try {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
@@ -25,38 +25,45 @@ public class ServerThread extends Thread{
 			outToClient.writeBytes("Hvad er dit navn?" + "\n");
 			String navn = inFromClient.readLine();
 			System.out.println(navn + " Has joined");
+
 			players.add(player = GameLogic.makePlayers(navn));
+			clients.add(outToClient);
 			System.out.println(player);
-			// Do the work and the communication with the client here	
-			// The following two lines are only an example
+
 			while(connSocket.isConnected()) {
 				sleep(3000);
 				System.out.println("Sender update til clients");
 				updateClients();
 			}
-		} catch (IOException e) {
-			players.remove(player);
-			clients.remove(outToClient);
+		} catch (IOException | InterruptedException e) {
+			System.out.println("Forbindelse tabt til spiller: " + player.getName());
 			e.printStackTrace();
-		} catch (InterruptedException e) {
-			players.remove(player);
-			clients.remove(outToClient);
-            throw new RuntimeException(e);
-        }
-        // do the work here
+		} finally {
+			// Fjern spilleren og forbindelsen uanset hvad der sker
+			if (player != null) players.remove(player);
+			if (outToClient != null) clients.remove(outToClient);
+			try {
+				if (connSocket != null && !connSocket.isClosed()) {
+					connSocket.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
+
 	public void updateClients() throws IOException {
 		// lav en arraylist med 3 personer
 		System.out.println("Updatere clients");
 		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarr = new JSONArray();
-		for (int i=0;i< GameLogic.players.size();i++) {
+		for (int i=0;i< players.size();i++) {
 			JSONObject jo = new JSONObject();
-			jo.put("name",GameLogic.players.get(i).getName());
-			jo.put("x", GameLogic.players.get(i).getXpos());
-			jo.put("y", GameLogic.players.get(i).getYpos());
-			jo.put("direction",GameLogic.players.get(i).getDirection());
-			jo.put("point", GameLogic.players.get(i).getPoint());
+			jo.put("name",players.get(i).getName());
+			jo.put("x", players.get(i).getXpos());
+			jo.put("y", players.get(i).getYpos());
+			jo.put("direction",players.get(i).getDirection());
+			jo.put("point", players.get(i).getPoint());
 			jarr.put(jo);
 		}
 		JSONObject jo2 = new JSONObject();
@@ -68,7 +75,12 @@ public class ServerThread extends Thread{
 
 		// lav forbindelse til server og send den skabte JSON
 		for (DataOutputStream c : clients){
-			outToClient.writeBytes(s + '\n');
+			try {
+				c.writeBytes(s + '\n');
+			} catch (IOException e) {
+				System.out.println("En klient kunne ikke modtage data – fjernes.");
+				clients.remove(c);
+			}
 		}
 
 	}

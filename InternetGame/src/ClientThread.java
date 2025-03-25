@@ -12,6 +12,7 @@ public class ClientThread extends Thread{
 
     private Socket clientSocket;
     private static ArrayList<Player> players = null;
+    private pair oldPair;
 
     public ClientThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -28,6 +29,9 @@ public class ClientThread extends Thread{
             while(true){
                 // Gennemløb JSON og skab Arrayliste med personer ud fra JSON
                 String s = inFromServer.readLine();
+                for (Player player : players) {
+                    Gui.removePlayerOnScreen(player.location);
+                }
                 players.clear();
                 System.out.println(s);
                 //System.out.println("" + inFromServer.readLine());
@@ -38,6 +42,9 @@ public class ClientThread extends Thread{
                     Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"));
                     players.add(p);
                 };
+                for (Player player : players) {
+                    Gui.placePlayerOnScreen(player.getLocation(), player.getDirection());
+                }
                 System.out.println(players.toString());
                 System.out.println("Modtaget JSON fra server:");
                 Gui.updateScoreTable();

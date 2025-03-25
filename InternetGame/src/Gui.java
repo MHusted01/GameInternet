@@ -99,8 +99,8 @@ public class Gui extends Application {
 			});
 			
             // Putting default players on screen
-			for (int i = 0; i< GameLogic.players.size(); i++) {
-			  fields[GameLogic.players.get(i).getXpos()][GameLogic.players.get(i).getYpos()].setGraphic(new ImageView(hero_up));
+			for (int i = 0; i< ClientThread.getPlayers().size(); i++) {
+			  fields[ClientThread.getPlayers().get(i).getXpos()][ClientThread.getPlayers().get(i).getYpos()].setGraphic(new ImageView(hero_up));
 			}
 			scoreList.setText(getScoreList());
 		} catch(Exception e) {
