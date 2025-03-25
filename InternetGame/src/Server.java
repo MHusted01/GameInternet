@@ -17,7 +17,6 @@ public class Server {
 		while (true) {
 			Socket connectionSocket = welcomeSocket.accept();
 			(new ServerThread(connectionSocket)).start();
-			System.out.println("tråd oprettet");
 		}
 	}
 

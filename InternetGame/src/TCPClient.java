@@ -11,21 +11,21 @@ public class TCPClient {
 	public static void main(String argv[]) throws Exception{
 		String sentence;
 		String modifiedSentence;
-		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(System.in));
 		Socket clientSocket= new Socket("localhost",6789);
 		DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
 
 		new ClientThread(clientSocket).start();
 
-		String navn = inFromUser.readLine();
+		String navn = inFromServer.readLine();
 		outToServer.writeBytes(navn + "\n");
 
 		Application.launch(Gui.class);
 
 		while(clientSocket.isConnected()){
 			sendDirection("Venstre", outToServer);
-			int direction = inFromUser.read();
-			sentence = inFromUser.readLine();
+			int direction = inFromServer.read();
+			sentence = inFromServer.readLine();
 			outToServer.write(direction);
 			outToServer.writeBytes(sentence + '\n');
 		}

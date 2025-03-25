@@ -7,52 +7,32 @@ import java.util.ArrayList;
 
 public class ServerThread extends Thread{
 	Socket connSocket;
-	Player player;
-	DataOutputStream outToClient;
+	private Player player;
+	private static ArrayList<Player> players = new ArrayList<>();
+	private DataOutputStream outToClient;
+	private static ArrayList<DataOutputStream> clients = new ArrayList<>();
 	
 	public ServerThread(Socket connSocket) throws IOException {
 		this.connSocket = connSocket;
 		this.outToClient = new DataOutputStream(connSocket.getOutputStream());
+		clients.add(outToClient);
 	}
 	public void run() {
 		try {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
-			DataOutputStream outToClient = new DataOutputStream(connSocket.getOutputStream());
+
+			System.out.println("tråd oprettet");
 			outToClient.writeBytes("Hvad er dit navn?" + "\n");
 			String navn = inFromClient.readLine();
 			System.out.println(navn + " Has joined");
-			player = GameLogic.makePlayers(navn);
-
-			
+			players.add(player = GameLogic.makePlayers(navn));
+			System.out.println(player);
 			// Do the work and the communication with the client here	
 			// The following two lines are only an example
 			while(connSocket.isConnected()) {
-				String clientSentence = inFromClient.readLine();
-				System.out.println(clientSentence); // modtaget update fra client
 				System.out.println("Sender update til clients");
 				updateClients();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			}
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
@@ -60,7 +40,7 @@ public class ServerThread extends Thread{
 	}
 	public void updateClients() throws IOException {
 		// lav en arraylist med 3 personer
-
+		System.out.println("Updatere clients");
 		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarr = new JSONArray();
 		for (int i=0;i< GameLogic.players.size();i++) {
@@ -79,8 +59,9 @@ public class ServerThread extends Thread{
 		System.out.println(s);
 
 		// lav forbindelse til server og send den skabte JSON
-
-		outToClient.writeBytes(s + '\n');
+		for (DataOutputStream c : clients){
+			outToClient.writeBytes(s + '\n');
+		}
 
 	}
 }

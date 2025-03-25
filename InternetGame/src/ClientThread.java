@@ -21,6 +21,8 @@ public class ClientThread extends Thread{
         try {
             sleep(3000);
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            String startMessage = inFromServer.readLine();
+            System.out.println(startMessage);
             while(true){
 
                 // Gennemløb JSON og skab Arrayliste med personer ud fra JSON
