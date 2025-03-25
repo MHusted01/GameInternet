@@ -12,7 +12,6 @@ public class ClientThread extends Thread{
 
     private Socket clientSocket;
     private static ArrayList<Player> players = null;
-    private pair oldPair;
 
     public ClientThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -29,12 +28,10 @@ public class ClientThread extends Thread{
             while(true){
                 // Gennemløb JSON og skab Arrayliste med personer ud fra JSON
                 String s = inFromServer.readLine();
-                for (Player player : players) {
-                    Gui.removePlayerOnScreen(player.location);
+                for (Player p : players){
+                    Gui.removePlayerOnScreen(p.location);
                 }
                 players.clear();
-                System.out.println(s);
-                //System.out.println("" + inFromServer.readLine());
                 JSONObject jo = new JSONObject(s);
                 JSONArray jarr = jo.getJSONArray("liste");
                 for (int i = 0; i < jarr.length(); i++) {
@@ -42,16 +39,11 @@ public class ClientThread extends Thread{
                     Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"));
                     players.add(p);
                 };
-                for (Player player : players) {
-                    Gui.placePlayerOnScreen(player.getLocation(), player.getDirection());
+                for (Player p : players){
+                    Gui.placePlayerOnScreen(p.location,p.direction);
                 }
-                System.out.println(players.toString());
-                System.out.println("Modtaget JSON fra server:");
                 Gui.updateScoreTable();
-                // testudskrigt af den skabte Arraylist
-                for (int i = 0; i < players.size(); i++) {
-                    System.out.println(players.get(i).getName() + "   " + players.get(i).getLocation()+ "    " + players.get(i).getDirection() +  "   " + players.get(i).getPoint());
-                }
+
             }
         }
         catch (Exception e){

@@ -24,8 +24,7 @@ public class ServerThread extends Thread{
 			outToClient.writeBytes("Hvad er dit navn?" + "\n");
 			String navn = inFromClient.readLine();
 			System.out.println(navn + " Has joined");
-			GameLogic.players.add(player = GameLogic.makePlayers(navn));
-			System.out.println(player);
+			player = GameLogic.makePlayers(navn);
 			// Do the work and the communication with the client here	
 			// The following two lines are only an example
 			while(connSocket.isConnected()) {
@@ -46,7 +45,6 @@ public class ServerThread extends Thread{
 	}
 	public void updateClients() throws IOException {
 		// lav en arraylist med 3 personer
-		System.out.println("Updatere clients");
 		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarr = new JSONArray();
 		for (int i=0;i< GameLogic.players.size();i++) {
@@ -63,11 +61,11 @@ public class ServerThread extends Thread{
 		String s= jo2.toString();
 
 		// Sysout af den skabte JSON
-		System.out.println(s);
+		//System.out.println(s);
 
 		// lav forbindelse til server og send den skabte JSON
 		for (DataOutputStream c : clients){
-			c.writeBytes(s + '\n');
+			outToClient.writeBytes(s + '\n');
 		}
 
 	}

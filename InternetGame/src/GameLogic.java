@@ -5,7 +5,7 @@ import java.util.Random;
 
 
 public class GameLogic {
-public static List<Player> players = new ArrayList<Player>();
+public static List<Player> players = new ArrayList<Player>();	
 	//public static Player me;
 	
 	
@@ -13,7 +13,6 @@ public static List<Player> players = new ArrayList<Player>();
 		pair p=getRandomFreePosition();
 		Player me = new Player(name,p,"up");
 		players.add(me);
-		p=getRandomFreePosition();
 		return me;
 	}
 	

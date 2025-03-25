@@ -157,10 +157,8 @@ public class Gui extends Application {
 	
 	public static String getScoreList() {
 		StringBuffer b = new StringBuffer(100);
-		System.out.println(ClientThread.getPlayers().toString());
 		for (Player p : ClientThread.getPlayers()) {
 			b.append(p+"\r\n");
-			System.out.println("test");
 		}
 		return b.toString();
 	}
