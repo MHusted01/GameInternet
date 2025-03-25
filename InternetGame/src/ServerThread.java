@@ -4,92 +4,64 @@ import org.json.JSONObject;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Random;
 
-public class ServerThread extends Thread {
-	private Socket connSocket;
+public class ServerThread extends Thread{
+	Socket connSocket;
 	private Player player;
-	private BufferedReader inFromClient;
+	private static ArrayList<Player> players = new ArrayList<>();
 	private DataOutputStream outToClient;
-	public static ArrayList<DataOutputStream> allClients = new ArrayList<>();
-	public static ArrayList<Player> players = new ArrayList<>();
-
+	private static ArrayList<DataOutputStream> clients = new ArrayList<>();
+	
 	public ServerThread(Socket connSocket) throws IOException {
 		this.connSocket = connSocket;
-		this.inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
 		this.outToClient = new DataOutputStream(connSocket.getOutputStream());
-		synchronized (allClients) { allClients.add(outToClient); }
+		clients.add(outToClient);
 	}
-
 	public void run() {
 		try {
-			outToClient.writeBytes("Hvad er dit navn?\n");
-			String navn = inFromClient.readLine();
-			System.out.println(navn + " har tilsluttet sig.");
-			player = GameLogic.makePlayers(navn);
-			players.add(player);
+			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
 
-			while (connSocket.isConnected()) {
-				String clientSentence = inFromClient.readLine();
-				if (clientSentence == null) break;
-				System.out.println("Modtaget: " + clientSentence);
-				player.setDirection(clientSentence);
+			System.out.println("tråd oprettet");
+			outToClient.writeBytes("Hvad er dit navn?" + "\n");
+			String navn = inFromClient.readLine();
+			System.out.println(navn + " Has joined");
+			players.add(player = GameLogic.makePlayers(navn));
+			System.out.println(player);
+			// Do the work and the communication with the client here	
+			// The following two lines are only an example
+			while(connSocket.isConnected()) {
+				System.out.println("Sender update til clients");
 				updateClients();
 			}
 		} catch (IOException e) {
-			System.out.println("Forbindelse mistet til klient.");
-		} finally {
-			synchronized (allClients) { allClients.remove(outToClient); }
-			players.remove(player);
-			try { connSocket.close(); } catch (IOException ignored) {}
-		}
+			e.printStackTrace();
+		}		
+		// do the work here
 	}
-
-	public void updateClients() {
+	public void updateClients() throws IOException {
+		// lav en arraylist med 3 personer
+		System.out.println("Updatere clients");
+		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarr = new JSONArray();
-		for (Player p : players) {
+		for (int i=0;i< GameLogic.players.size();i++) {
 			JSONObject jo = new JSONObject();
-			jo.put("name", p.getName());
-			jo.put("x", p.getXpos());
-			jo.put("y", p.getYpos());
-			jo.put("direction", p.getDirection());
+			jo.put("name",GameLogic.players.get(i).getName());
+			jo.put("x", GameLogic.players.get(i).getXpos());
+			jo.put("y", GameLogic.players.get(i).getYpos());
+			jo.put("direction",GameLogic.players.get(i).getDirection());
 			jarr.put(jo);
 		}
 		JSONObject jo2 = new JSONObject();
-		jo2.put("liste", jarr);
-		String jsonStr = jo2.toString();
+		jo2.put("liste",jarr);
+		String s= jo2.toString();
 
-		synchronized (allClients) {
-			for (DataOutputStream out : allClients) {
-				try {
-					out.writeBytes(jsonStr + '\n');
-				} catch (IOException ignored) {}
-			}
+		// Sysout af den skabte JSON
+		System.out.println(s);
+
+		// lav forbindelse til server og send den skabte JSON
+		for (DataOutputStream c : clients){
+			outToClient.writeBytes(s + '\n');
 		}
-	}
 
-	public static pair getRandomFreePosition()
-	// finds a random new position which is not wall
-	// and not occupied by other players
-	{
-		int x = 1;
-		int y = 1;
-		boolean foundfreepos = false;
-		while  (!foundfreepos) {
-			Random r = new Random();
-			x = Math.abs(r.nextInt()%18) +1;
-			y = Math.abs(r.nextInt()%18) +1;
-			if (Generel.board[y].charAt(x)==' ') // er det gulv ?
-			{
-				foundfreepos = true;
-				for (Player p: players) {
-					if (p.getXpos()==x && p.getYpos()==y) //pladsen optaget af en anden
-						foundfreepos = false;
-				}
-
-			}
-		}
-		pair p = new pair(x,y);
-		return p;
 	}
 }
