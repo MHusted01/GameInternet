@@ -7,7 +7,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="openjfx.javafx.controls" level="application" />
+    <orderEntry type="library" exported="" name="openjfx.javafx.controls" level="application" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -26,5 +26,6 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="javafx-sdk-21.0" level="application" />
   </component>
 </module>

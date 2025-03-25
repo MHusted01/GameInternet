@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 
-public class TCPClient {
+public class TCPClient2 {
 
 	public static void main(String[] args) throws Exception, IOException {
 		// lav en arraylist med 3 personer
