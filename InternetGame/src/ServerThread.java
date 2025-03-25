@@ -19,28 +19,34 @@ public class ServerThread extends Thread{
 	public void run() {
 		try {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
+
 			System.out.println("tråd oprettet");
 			outToClient.writeBytes("Hvad er dit navn?" + "\n");
 			String navn = inFromClient.readLine();
 			System.out.println(navn + " Has joined");
 			player = GameLogic.makePlayers(navn);
-			// Do the work and the communication with the client here	
+			// Do the work and the communication with the client here
 			// The following two lines are only an example
-			sleep(3000);
-			while(connSocket.isConnected()) {
-				System.out.println("Sender update til clients");
+			sleep(2500);
+			while (connSocket.isConnected()) {
 				updateClients();
-				String[] move = inFromClient.readLine().split(" ");
-				for (String s : move){
-					System.out.println(s);
-				}
+				String moveCommand = inFromClient.readLine(); // BLOCKING READ
+				if (moveCommand == null) break; // client disconnected
 
+				String[] parts = moveCommand.split(" ");
+				int dx = Integer.parseInt(parts[0]);
+				int dy = Integer.parseInt(parts[1]);
+				String direction = parts[2];
+//test
+				GameLogic.updatePlayer(player, dx, dy, direction);
 			}
 		} catch (IOException e) {
 			GameLogic.players.remove(player);
 			clients.remove(outToClient);
 			e.printStackTrace();
 		} catch (InterruptedException e) {
+			GameLogic.players.remove(player);
+			clients.remove(outToClient);
             throw new RuntimeException(e);
         }
         // do the work here
