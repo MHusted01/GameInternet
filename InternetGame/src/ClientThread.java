@@ -21,19 +21,24 @@ public class ClientThread extends Thread{
     public void run() {
         try {
             sleep(3000);
+            players = new ArrayList<>();
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String startMessage = inFromServer.readLine();
             System.out.println(startMessage);
             while(true){
                 // Gennemløb JSON og skab Arrayliste med personer ud fra JSON
-                players = new ArrayList<Player>();
-                JSONObject jo = new JSONObject(inFromServer.readLine());
+                String s = inFromServer.readLine();
+                players.clear();
+                System.out.println(s);
+                //System.out.println("" + inFromServer.readLine());
+                JSONObject jo = new JSONObject(s);
                 JSONArray jarr = jo.getJSONArray("liste");
                 for (int i = 0; i < jarr.length(); i++) {
                     JSONObject js = (JSONObject) jarr.get(i);
                     Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"));
                     players.add(p);
                 };
+                System.out.println(players.toString());
                 System.out.println("Modtaget JSON fra server:");
                 Gui.updateScoreTable();
                 // testudskrigt af den skabte Arraylist
