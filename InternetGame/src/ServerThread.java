@@ -19,7 +19,6 @@ public class ServerThread extends Thread{
 	public void run() {
 		try {
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
-
 			System.out.println("tråd oprettet");
 			outToClient.writeBytes("Hvad er dit navn?" + "\n");
 			String navn = inFromClient.readLine();
@@ -27,18 +26,21 @@ public class ServerThread extends Thread{
 			player = GameLogic.makePlayers(navn);
 			// Do the work and the communication with the client here	
 			// The following two lines are only an example
+			sleep(3000);
 			while(connSocket.isConnected()) {
-				sleep(3000);
 				System.out.println("Sender update til clients");
 				updateClients();
+				String[] move = inFromClient.readLine().split(" ");
+				for (String s : move){
+					System.out.println(s);
+				}
+
 			}
 		} catch (IOException e) {
 			GameLogic.players.remove(player);
 			clients.remove(outToClient);
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			GameLogic.players.remove(player);
-			clients.remove(outToClient);
             throw new RuntimeException(e);
         }
         // do the work here
@@ -65,7 +67,7 @@ public class ServerThread extends Thread{
 
 		// lav forbindelse til server og send den skabte JSON
 		for (DataOutputStream c : clients){
-			outToClient.writeBytes(s + '\n');
+			c.writeBytes(s + '\n');
 		}
 
 	}
