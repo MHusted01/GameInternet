@@ -15,7 +15,6 @@ public class ServerThread extends Thread{
 	public ServerThread(Socket connSocket) throws IOException {
 		this.connSocket = connSocket;
 		this.outToClient = new DataOutputStream(connSocket.getOutputStream());
-		clients.add(outToClient);
 	}
 	public void run() {
 		try {
@@ -26,6 +25,7 @@ public class ServerThread extends Thread{
 			String navn = inFromClient.readLine();
 			System.out.println(navn + " Has joined");
 			players.add(player = GameLogic.makePlayers(navn));
+			clients.add(outToClient);
 			System.out.println(player);
 			// Do the work and the communication with the client here	
 			// The following two lines are only an example
@@ -37,8 +37,10 @@ public class ServerThread extends Thread{
 		} catch (IOException e) {
 			players.remove(player);
 			clients.remove(outToClient);
+			System.out.println(player.getName() + " has Left");
 			e.printStackTrace();
 		} catch (InterruptedException e) {
+			System.out.println(player.getName() + " has Left");
 			players.remove(player);
 			clients.remove(outToClient);
             throw new RuntimeException(e);
@@ -50,13 +52,13 @@ public class ServerThread extends Thread{
 		System.out.println("Updatere clients");
 		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarr = new JSONArray();
-		for (int i=0;i< GameLogic.players.size();i++) {
+		for (int i=0;i< players.size();i++) {
 			JSONObject jo = new JSONObject();
-			jo.put("name",GameLogic.players.get(i).getName());
-			jo.put("x", GameLogic.players.get(i).getXpos());
-			jo.put("y", GameLogic.players.get(i).getYpos());
-			jo.put("direction",GameLogic.players.get(i).getDirection());
-			jo.put("point", GameLogic.players.get(i).getPoint());
+			jo.put("name",players.get(i).getName());
+			jo.put("x", players.get(i).getXpos());
+			jo.put("y", players.get(i).getYpos());
+			jo.put("direction",players.get(i).getDirection());
+			jo.put("point", players.get(i).getPoint());
 			jarr.put(jo);
 		}
 		JSONObject jo2 = new JSONObject();
@@ -68,7 +70,7 @@ public class ServerThread extends Thread{
 
 		// lav forbindelse til server og send den skabte JSON
 		for (DataOutputStream c : clients){
-			outToClient.writeBytes(s + '\n');
+			c.writeBytes(s + '\n');
 		}
 
 	}
