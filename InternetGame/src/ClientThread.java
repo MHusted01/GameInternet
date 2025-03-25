@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class ClientThread extends Thread{
 
     private Socket clientSocket;
-    static ArrayList<Player> players = null;
+    private static ArrayList<Player> players = null;
 
     public ClientThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -35,6 +35,7 @@ public class ClientThread extends Thread{
                     players.add(p);
                 };
                 System.out.println("Modtaget JSON fra server:");
+                Gui.updateScoreTable();
                 // testudskrigt af den skabte Arraylist
                 for (int i = 0; i < players.size(); i++) {
                     System.out.println(players.get(i).getName() + "   " + players.get(i).getLocation()+ "    " + players.get(i).getDirection() +  "   " + players.get(i).getPoint());
@@ -44,5 +45,9 @@ public class ClientThread extends Thread{
         catch (Exception e){
 
         }
+    }
+
+    public static ArrayList<Player> getPlayers() {
+        return players;
     }
 }

@@ -30,7 +30,7 @@ public class ServerThread extends Thread{
 			// Do the work and the communication with the client here	
 			// The following two lines are only an example
 			while(connSocket.isConnected()) {
-				sleep(10000);
+				sleep(2000);
 				System.out.println("Sender update til clients");
 				updateClients();
 			}
