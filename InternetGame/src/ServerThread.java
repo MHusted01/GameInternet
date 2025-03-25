@@ -8,7 +8,6 @@ import java.util.ArrayList;
 public class ServerThread extends Thread{
 	Socket connSocket;
 	private Player player;
-	private static ArrayList<Player> players = new ArrayList<>();
 	private DataOutputStream outToClient;
 	private static ArrayList<DataOutputStream> clients = new ArrayList<>();
 	
@@ -25,7 +24,7 @@ public class ServerThread extends Thread{
 			outToClient.writeBytes("Hvad er dit navn?" + "\n");
 			String navn = inFromClient.readLine();
 			System.out.println(navn + " Has joined");
-			players.add(player = GameLogic.makePlayers(navn));
+			GameLogic.players.add(player = GameLogic.makePlayers(navn));
 			System.out.println(player);
 			// Do the work and the communication with the client here	
 			// The following two lines are only an example
@@ -35,11 +34,11 @@ public class ServerThread extends Thread{
 				updateClients();
 			}
 		} catch (IOException e) {
-			players.remove(player);
+			GameLogic.players.remove(player);
 			clients.remove(outToClient);
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			players.remove(player);
+			GameLogic.players.remove(player);
 			clients.remove(outToClient);
             throw new RuntimeException(e);
         }
@@ -68,7 +67,7 @@ public class ServerThread extends Thread{
 
 		// lav forbindelse til server og send den skabte JSON
 		for (DataOutputStream c : clients){
-			outToClient.writeBytes(s + '\n');
+			c.writeBytes(s + '\n');
 		}
 
 	}
