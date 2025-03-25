@@ -23,6 +23,7 @@ public class TCPClient {
 		Application.launch(Gui.class);
 
 		while(clientSocket.isConnected()){
+			System.out.println("Sendt venstre til server");
 			sendDirection("Venstre", outToServer);
 			int direction = inFromServer.read();
 			sentence = inFromServer.readLine();

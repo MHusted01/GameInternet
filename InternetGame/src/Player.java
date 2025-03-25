@@ -46,6 +46,10 @@ public class Player {
 		return name;
 	}
 
+	public int getPoint() {
+		return point;
+	}
+
 	public void addPoints(int p) {
 		point += p;
 	}
