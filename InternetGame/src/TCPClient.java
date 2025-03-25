@@ -7,13 +7,13 @@ import java.util.ArrayList;
 // Denne er kun medtaget til Test-formål, skal IKKE anvendes.
 public class TCPClient {
 	private static ArrayList<Player> players = new ArrayList<>();
-
+	public static DataOutputStream outToServer;
 	public static void main(String argv[]) throws Exception{
 		String sentence;
 		String modifiedSentence;
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(System.in));
 		Socket clientSocket= new Socket("localhost",6789);
-		DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+		outToServer = new DataOutputStream(clientSocket.getOutputStream());
 
 		new ClientThread(clientSocket).start();
 
