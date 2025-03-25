@@ -1,7 +1,7 @@
 public class Player {
 	String name;
 	pair location;
-	int point;
+	static int point;
 	String direction;
 
 	public Player(String name, pair loc, String direction) {

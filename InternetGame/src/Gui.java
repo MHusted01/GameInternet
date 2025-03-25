@@ -22,7 +22,7 @@ public class Gui extends Application {
 	
 
 	private static Label[][] fields;
-	private TextArea scoreList;
+	private static TextArea scoreList;
 	
 
 
@@ -139,31 +139,23 @@ public class Gui extends Application {
 		placePlayerOnScreen(newpos,direction);
 	}
 	
-	public void updateScoreTable()
+	public static void updateScoreTable()
 	{
 		Platform.runLater(() -> {
 			scoreList.setText(getScoreList());
 			});
 	}
 	public void playerMoved(int delta_x, int delta_y, String direction) {
-
-
-
 		//GameLogic.updatePlayer(delta_x,delta_y,direction);
-		//updateScoreTable();
-
+		updateScoreTable();
 	}
-	
-	public String getScoreList() {
-//		StringBuffer b = new StringBuffer(100);
-//		for (Player p : GameLogic.players) {
-//			b.append(p+"\r\n");
-//		}
-//		return b.toString();
-	return "";}
 
-
-
-	
+	public static String getScoreList() {
+		StringBuffer b = new StringBuffer(100);
+		for (Player p : ClientThread.players) {
+			b.append(p.getName() + ": " + p.getPoint() + "\r\n");
+		}
+		return b.toString();
+	}
 }
 

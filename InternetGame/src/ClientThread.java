@@ -32,12 +32,19 @@ public class ClientThread extends Thread{
                 for (int i = 0; i < jarr.length(); i++) {
                     JSONObject js = (JSONObject) jarr.get(i);
                     Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"));
+                    p.addPoints(js.getInt("point"));
                     players.add(p);
                 };
+
+                for (Player player : players) {
+                    Gui.placePlayerOnScreen(player.getLocation(), player.getDirection());
+                }
+                Gui.updateScoreTable();
                 System.out.println("Modtaget JSON fra server:");
                 // testudskrigt af den skabte Arraylist
                 for (int i = 0; i < players.size(); i++) {
-                    System.out.println(players.get(i).getName() + "   " + players.get(i).getLocation()+ "    " + players.get(i).getDirection() +  "   " + players.get(i).getPoint());
+                    System.out.println(players.get(i).getName() + "   " + players.get(i).getLocation()+ "    "
+                            + players.get(i).getDirection() +  "   " + players.get(i).getPoint());
                 }
             }
         }
