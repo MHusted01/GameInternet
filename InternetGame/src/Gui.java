@@ -150,8 +150,11 @@ public class Gui extends Application {
 			});
 	}
 	public void playerMoved(int delta_x, int delta_y, String direction) {
-		GameLogic.updatePlayer(App.me,delta_x,delta_y,direction);
-		updateScoreTable();
+
+
+
+		//GameLogic.updatePlayer(delta_x,delta_y,direction);
+		//updateScoreTable();
 
 	}
 	
