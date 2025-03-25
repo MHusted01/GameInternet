@@ -9,6 +9,8 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.*;
 
+import java.io.IOException;
+
 public class Gui extends Application {
 
 	public static final int size = 30; 
@@ -148,9 +150,15 @@ public class Gui extends Application {
 	}
 	public void playerMoved(int delta_x, int delta_y, String direction) {
 
+		// Sender info til server, hvor efter server opdatere gui og sender til client
+		String move = String.valueOf(delta_x) + " " + String.valueOf(delta_y)  + " " + direction;
+        try {
+            TCPClient.outToServer.writeBytes(move + "\n");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-
-		//GameLogic.updatePlayer(delta_x,delta_y,direction);
+        //GameLogic.updatePlayer(delta_x,delta_y,direction);
 		//updateScoreTable();
 
 	}
