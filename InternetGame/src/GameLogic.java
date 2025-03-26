@@ -23,7 +23,8 @@ public class GameLogic {
 		return me;
 	}
 	public static void makeTreasure(){
-		Treasure t = new Treasure()
+		Treasure t = new Treasure(getRandomFreePosition());
+		elements.add(t);
 	}
 
 	public static pair getRandomFreePosition()
@@ -51,7 +52,7 @@ public class GameLogic {
 		return p;
 	}
 
-	public static synchronized void updatePlayer(Player me, int delta_x, int delta_y, String direction) {
+	public static synchronized void updatePlayer(Player me, int delta_x, int delta_y, String direction) throws IOException {
 		for (Element element: elements) {
 			if (element instanceof Player){
 				Player player = (Player) element;
@@ -64,13 +65,18 @@ public class GameLogic {
 						player.addPoints(-1);
 					} else {
 						// Collision detection
-						Player p = getPlayerAt(x + delta_x, y + delta_y);
-						if (p != null) {
+						Element e = getElementAt(x + delta_x, y + delta_y);
+						if (e  instanceof Player) {
 							player.addPoints(10);
-							p.addPoints(-10);
+							(Player) e.addPoints(-10);
 							pair pa = getRandomFreePosition();
-							p.setLocation(pa);
+							e.setLocation(pa);
 							// Optional: Gui.movePlayerOnScreen(new pair(x + delta_x, y + delta_y), pa, p.direction);
+						}
+						if (e instanceof Treasure){
+							player.addPoints(50);
+							elements.remove(e);
+							makeTreasure();
 						} else {
 							player.addPoints(1);
 							pair newpos = new pair(x + delta_x, y + delta_y);
@@ -80,26 +86,29 @@ public class GameLogic {
 					}
 					break;
 				}
-		}}
-	}
-
-
-	public static Player getPlayerAt(int x, int y) {
-		for (Element p : elements) {
-			if (p instanceof Player){
-			if (p.getXpos() == x && p.getYpos() == y) {
-				return (Player) p;
-			}
 			}
 		}
-		return null;
 	}
+
+
+	public static Element getElementAt(int x, int y) throws IOException {
+		for (Element p : elements) {
+			if (p instanceof Player) {
+				if (p.getXpos() == x && p.getYpos() == y) {
+					return (Player) p;
+				}
+			}
+			return null;
+		}
+        return null;
+    }
+
+
 	public static void updateClients() throws IOException {
 		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarrayP = new JSONArray();
 		JSONArray jarrayT = new JSONArray();
-
-		for (int i=0;i< elements.size();i++) {
+		for (int i = 0; i < elements.size(); i++) {
 			if (elements.get(i) instanceof Player) {
 				JSONObject joP = new JSONObject();
 				joP.put("name", elements.get(i).getName());
@@ -108,8 +117,7 @@ public class GameLogic {
 				joP.put("direction", elements.get(i).getDirection());
 				joP.put("point", elements.get(i).getPoint());
 				jarrayP.put(joP);
-			}
-			else { // if element is a treasure
+			} else { // if element is a treasure
 				JSONObject joT = new JSONObject();
 				joT.put("x", elements.get(i).getXpos());
 				joT.put("y", elements.get(i).getYpos());
@@ -117,19 +125,18 @@ public class GameLogic {
 			}
 		}
 		JSONObject jo = new JSONObject();
-		jo.put("Player",jarrayP);
+		jo.put("Player", jarrayP);
 		jo.put("Treasure", jarrayT);
-		String s= jo.toString();
+		String s = jo.toString();
 
 		// lav forbindelse til server og send den skabte JSON
-		for (Element e : elements){
-			if (e instanceof Player){
+		for (Element e : elements) {
+			if (e instanceof Player) {
 				Player player = (Player) e;
 				player.Update(s);
 			}
 		}
 	}
-
 }
 
 
