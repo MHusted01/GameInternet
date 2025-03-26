@@ -1,3 +1,8 @@
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,9 +14,10 @@ public class GameLogic {
 	//public static Player me;
 
 
-	public static Player makePlayers(String name) {
+	public static Player makePlayers(String name, DataOutputStream client) {
 		pair p = getRandomFreePosition();
 		Player me = new Player(name, p, "up", 0);
+		me.setOutToClient(client);
 		players.add(me);
 		return me;
 	}
@@ -41,7 +47,7 @@ public class GameLogic {
 		return p;
 	}
 
-	public static void updatePlayer(Player me, int delta_x, int delta_y, String direction) {
+	public static synchronized void updatePlayer(Player me, int delta_x, int delta_y, String direction) {
 		for (Player player : players) {
 			if (player.equals(me)) {
 				player.direction = direction;
@@ -79,6 +85,27 @@ public class GameLogic {
 			}
 		}
 		return null;
+	}
+	public static void updateClients() throws IOException {
+		// Pak indhold af arraylist ned i en JSON
+		JSONArray jarr = new JSONArray();
+		for (int i=0;i< players.size();i++) {
+			JSONObject jo = new JSONObject();
+			jo.put("name", players.get(i).getName());
+			jo.put("x", players.get(i).getXpos());
+			jo.put("y", players.get(i).getYpos());
+			jo.put("direction",players.get(i).getDirection());
+			jo.put("point", players.get(i).getPoint());
+			jarr.put(jo);
+		}
+		JSONObject jo2 = new JSONObject();
+		jo2.put("liste",jarr);
+		String s= jo2.toString();
+
+		// lav forbindelse til server og send den skabte JSON
+		for (Player p : players){
+			p.Update(s);
+		}
 	}
 
 }
