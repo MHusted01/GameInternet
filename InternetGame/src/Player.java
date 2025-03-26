@@ -1,16 +1,16 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public class Player {
+public class Player extends Element {
 	String name;
-	pair location;
 	int point;
+	private pair location;
 	private DataOutputStream outToClient;
 	String direction;
 
 	public Player(String name, pair loc, String direction, int point) {
+		super(loc);
 		this.name = name;
-		this.location = loc;
 		this.direction = direction;
 		this.point = point;
 	}
@@ -19,29 +19,6 @@ public class Player {
 		this.outToClient = outToClient;
 	}
 
-	public pair getLocation() {
-		return this.location;
-	}
-
-	public void setLocation(pair p) {
-		this.location = p;
-	}
-
-	public int getXpos() {
-		return location.x;
-	}
-
-	public void setXpos(int xpos) {
-		this.location.x = xpos;
-	}
-
-	public int getYpos() {
-		return location.y;
-	}
-
-	public void setYpos(int ypos) {
-		this.location.y = ypos;
-	}
 
 	public String getDirection() {
 		return direction;
@@ -57,6 +34,11 @@ public class Player {
 
 	public int getPoint() {
 		return point;
+	}
+
+	@Override
+	public pair getLocation() {
+		return location;
 	}
 
 	public void addPoints(int p) {

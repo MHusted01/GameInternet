@@ -37,10 +37,10 @@ public class ServerThread extends Thread{
 				GameLogic.updatePlayer(player, dx, dy, direction);
 			}
 		} catch (IOException e) {
-			GameLogic.players.remove(player);
+			GameLogic.elements.remove(player);
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			GameLogic.players.remove(player);
+			GameLogic.elements.remove(player);
             throw new RuntimeException(e);
         }
         // do the work here

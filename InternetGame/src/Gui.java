@@ -115,6 +115,11 @@ public class Gui extends Application {
 			fields[oldpos.getX()][oldpos.getY()].setGraphic(new ImageView(image_floor));
 			});
 	}
+	public static void removeTreasureOnScreen(pair oldpos) {
+		Platform.runLater(() -> {
+			fields[oldpos.getX()][oldpos.getY()].setGraphic(new ImageView(image_floor));
+		});
+	}
 	
 	public static void placePlayerOnScreen(pair newpos,String direction) {
 		Platform.runLater(() -> {
@@ -133,6 +138,13 @@ public class Gui extends Application {
 				fields[newx][newy].setGraphic(new ImageView(hero_down));
 			};
 			});
+	}
+	public static void placeTreasureOnScreen(pair newpos) {
+		Platform.runLater(() -> {
+			int newx = newpos.getX();
+			int newy = newpos.getY();
+
+		});
 	}
 	
 	public static void movePlayerOnScreen(pair oldpos,pair newpos,String direction)

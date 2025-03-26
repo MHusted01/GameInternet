@@ -2,16 +2,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class ClientThread extends Thread{
 
     private Socket clientSocket;
-    private static ArrayList<Player> players = null;
+    private static ArrayList<Element> elements = null;
 
     public ClientThread(Socket clientSocket) {
         this.clientSocket = clientSocket;
@@ -21,26 +19,35 @@ public class ClientThread extends Thread{
     public void run() {
         try {
             sleep(3000);
-            players = new ArrayList<>();
+            elements = new ArrayList<>();
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String startMessage = inFromServer.readLine();
             System.out.println(startMessage);
             while(true){
                 // Gennemløb JSON og skab Arrayliste med personer ud fra JSON
                 String s = inFromServer.readLine();
-                for (Player p : players){
-                    Gui.removePlayerOnScreen(p.location);
+                for (Element e : elements){
+                    if (e instanceof Player){
+                        Gui.removePlayerOnScreen(e.getLocation());
+                    }
+                    else { // element is treasure
+                        Gui.removeTreasureOnScreen(e.getLocation());
+                    }
                 }
-                players.clear();
+                elements.clear();
                 JSONObject jo = new JSONObject(s);
                 JSONArray jarr = jo.getJSONArray("liste");
                 for (int i = 0; i < jarr.length(); i++) {
+
                     JSONObject js = (JSONObject) jarr.get(i);
                     Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"), js.getInt("point"));
-                    players.add(p);
+                    elements.add(p);
                 };
-                for (Player p : players){
-                    Gui.placePlayerOnScreen(p.location,p.direction);
+                for (Element e : elements){{
+                    if (e instanceof Player) {
+                        Gui.placePlayerOnScreen(e.getLocation(),e.getDirection());
+                    }
+                }
                     Gui.updateScoreTable();
                 }
 
@@ -52,6 +59,12 @@ public class ClientThread extends Thread{
     }
 
     public static ArrayList<Player> getPlayers() {
+        ArrayList<Player> players = new ArrayList<>();
+        for (Element e : elements){
+            if (e instanceof Player){
+                players.add((Player) e);
+            }
+        }
         return players;
     }
 }
