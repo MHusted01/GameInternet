@@ -22,6 +22,9 @@ public class GameLogic {
 		elements.add(me);
 		return me;
 	}
+	public static void makeTreasure(){
+		Treasure t = new Treasure()
+	}
 
 	public static pair getRandomFreePosition()
 	// finds a random new position which is not wall
