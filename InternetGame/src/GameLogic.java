@@ -93,7 +93,9 @@ public class GameLogic {
 	}
 	public static void updateClients() throws IOException {
 		// Pak indhold af arraylist ned i en JSON
-		JSONArray jarr = new JSONArray();
+		JSONArray jarrayP = new JSONArray();
+		JSONArray jarrayT = new JSONArray();
+
 		for (int i=0;i< elements.size();i++) {
 			if (elements.get(i) instanceof Player) {
 				JSONObject joP = new JSONObject();
@@ -102,18 +104,19 @@ public class GameLogic {
 				joP.put("y", elements.get(i).getYpos());
 				joP.put("direction", elements.get(i).getDirection());
 				joP.put("point", elements.get(i).getPoint());
-				jarr.put(joP);
+				jarrayP.put(joP);
 			}
 			else { // if element is a treasure
 				JSONObject joT = new JSONObject();
 				joT.put("x", elements.get(i).getXpos());
 				joT.put("y", elements.get(i).getYpos());
-				jarr.put(joT);
+				jarrayT.put(joT);
 			}
 		}
-		JSONObject jo2 = new JSONObject();
-		jo2.put("liste",jarr);
-		String s= jo2.toString();
+		JSONObject jo = new JSONObject();
+		jo.put("Player",jarrayP);
+		jo.put("Treasure", jarrayT);
+		String s= jo.toString();
 
 		// lav forbindelse til server og send den skabte JSON
 		for (Element e : elements){

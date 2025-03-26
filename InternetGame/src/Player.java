@@ -4,7 +4,6 @@ import java.io.IOException;
 public class Player extends Element {
 	String name;
 	int point;
-	private pair location;
 	private DataOutputStream outToClient;
 	String direction;
 
@@ -36,10 +35,7 @@ public class Player extends Element {
 		return point;
 	}
 
-	@Override
-	public pair getLocation() {
-		return location;
-	}
+
 
 	public void addPoints(int p) {
 		point += p;

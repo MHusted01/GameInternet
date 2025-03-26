@@ -28,6 +28,7 @@ public class ClientThread extends Thread{
                 String s = inFromServer.readLine();
                 for (Element e : elements){
                     if (e instanceof Player){
+                        System.out.println(e);
                         Gui.removePlayerOnScreen(e.getLocation());
                     }
                     else { // element is treasure
@@ -36,16 +37,24 @@ public class ClientThread extends Thread{
                 }
                 elements.clear();
                 JSONObject jo = new JSONObject(s);
-                JSONArray jarr = jo.getJSONArray("liste");
-                for (int i = 0; i < jarr.length(); i++) {
-
-                    JSONObject js = (JSONObject) jarr.get(i);
+                JSONArray jarrayP = jo.getJSONArray("Player");
+                JSONArray jarrayT = jo.getJSONArray("Treasure");
+                for (int i = 0; i < jarrayP.length(); i++) {
+                    JSONObject js = (JSONObject) jarrayP.get(i);
                     Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"), js.getInt("point"));
                     elements.add(p);
+                };
+                for (int i = 0; i < jarrayT.length(); i++) {
+                    JSONObject js = (JSONObject) jarrayT.get(i);
+                    Treasure t = new Treasure( new pair(js.getInt("x"), js.getInt("y")));
+                    elements.add(t);
                 };
                 for (Element e : elements){{
                     if (e instanceof Player) {
                         Gui.placePlayerOnScreen(e.getLocation(),e.getDirection());
+                    }
+                    else {
+                        //Gui.placeTreasureOnScreen
                     }
                 }
                     Gui.updateScoreTable();
