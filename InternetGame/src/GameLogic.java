@@ -11,7 +11,7 @@ public class GameLogic {
 
 	public static Player makePlayers(String name) {
 		pair p = getRandomFreePosition();
-		Player me = new Player(name, p, "up");
+		Player me = new Player(name, p, "up", 0);
 		players.add(me);
 		return me;
 	}

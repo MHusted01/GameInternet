@@ -4,7 +4,7 @@ public class Player {
 	int point;
 	String direction;
 
-	public Player(String name, pair loc, String direction) {
+	public Player(String name, pair loc, String direction, int point) {
 		this.name = name;
 		this.location = loc;
 		this.direction = direction;
