@@ -27,7 +27,6 @@ public class ServerThread extends Thread{
 			sleep(2500);
 			while (connSocket.isConnected()) {
 				GameLogic.updateClients();
-				System.out.println("Heeey");
 				String moveCommand = inFromClient.readLine(); // BLOCKING READ
 				if (moveCommand == null) break; // client disconnected
 

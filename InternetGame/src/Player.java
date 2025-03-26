@@ -68,7 +68,6 @@ public class Player {
 	}
 	public synchronized void Update(String s) throws IOException {
 		outToClient.writeBytes(s + "\n");
-		System.out.println("test");
 	}
 }
 
