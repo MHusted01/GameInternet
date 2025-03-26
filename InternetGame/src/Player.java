@@ -66,6 +66,7 @@ public class Player {
 	public String toString() {
 		return name + ":   " + point;
 	}
+
 	public synchronized void Update(String s) throws IOException {
 		outToClient.writeBytes(s + "\n");
 	}
