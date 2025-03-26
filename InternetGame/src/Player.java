@@ -67,7 +67,7 @@ public class Player {
 		return name + ":   " + point;
 	}
 	public synchronized void Update(String s) throws IOException {
-		outToClient.writeBytes(s);
+		outToClient.writeBytes(s + "\n");
 		System.out.println("test");
 	}
 }
