@@ -36,7 +36,7 @@ public class ClientThread extends Thread{
                 JSONArray jarr = jo.getJSONArray("liste");
                 for (int i = 0; i < jarr.length(); i++) {
                     JSONObject js = (JSONObject) jarr.get(i);
-                    Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"));
+                    Player p = new Player(js.getString("name"), new pair(js.getInt("x"), js.getInt("y")), js.getString("direction"), js.getInt("point"));
                     players.add(p);
                 };
                 for (Player p : players){
