@@ -26,6 +26,17 @@ public class GameLogic {
 		Treasure t = new Treasure(getRandomFreePosition());
 		elements.add(t);
 	}
+	public static boolean nameIsTaken(String name){
+		Boolean bool = false;
+		for (Element p : elements){
+			if (p instanceof Player){
+				if (((Player) p).name.equals(name)){
+					bool = true;
+				};
+			}
+		}
+		return bool;
+	}
 
 	public static pair getRandomFreePosition()
 	// finds a random new position which is not wall

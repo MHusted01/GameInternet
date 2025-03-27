@@ -18,23 +18,14 @@ public class ServerThread extends Thread{
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
 			DataOutputStream client = new DataOutputStream(connSocket.getOutputStream());
 			System.out.println("tråd oprettet");
-			boolean navnLedig = false;
-			String navn = null;
 			client.writeBytes("Hvad er dit navn?" + "\n");
-			navn = inFromClient.readLine();
-			while (!navnLedig) {
-				navnLedig = true;
-				for (Element element : GameLogic.elements) {
-					if (element instanceof Player) {
-						if (((Player) element).name.equals(navn)) {
-							client.writeBytes("Navn allerede valgt - vælg nyt navn" + "\n");
-							navn = inFromClient.readLine();
-							navnLedig = false;
-						}
-					}
-				}
+			String navn = inFromClient.readLine();
+			while(GameLogic.nameIsTaken(navn)){
+				client.writeBytes("Navn allered brugt - vælg nyt navn" + "\n");
+				navn = inFromClient.readLine();
 			}
 			System.out.println(navn + " Has joined");
+			client.writeBytes("You have joined" + "\n");
 			player = GameLogic.makePlayers(navn, client);
 
 			// Do the work and the communication with the client here

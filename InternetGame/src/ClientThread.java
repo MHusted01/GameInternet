@@ -23,6 +23,13 @@ public class ClientThread extends Thread{
             BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             String startMessage = inFromServer.readLine();
             System.out.println(startMessage);
+            startMessage = inFromServer.readLine();
+            System.out.println(startMessage);
+            while(!startMessage.equals("You have joined")){
+                startMessage = inFromServer.readLine();
+                System.out.println(startMessage);
+            }
+
             while(true){
                 // Gennemløb JSON og skab Arrayliste med personer ud fra JSON
                 String s = inFromServer.readLine();
