@@ -46,7 +46,13 @@ public class Player extends Element {
 	}
 
 	public synchronized void Update(String s) throws IOException {
-		outToClient.writeBytes(s + "\n");
+		try {
+			outToClient.writeBytes(s + "\n");
+		} catch (IOException e) {
+			System.out.println("Klient: " + name + " afbrød forbindelse.");
+			GameLogic.elements.remove(this);
+			throw e;
+		}
 	}
 }
 

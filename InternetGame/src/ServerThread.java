@@ -33,8 +33,8 @@ public class ServerThread extends Thread{
 			sleep(2500);
 			while (connSocket.isConnected()) {
 				GameLogic.updateClients();
-				String moveCommand = inFromClient.readLine(); // BLOCKING READ
-				if (moveCommand == null) break; // client disconnected
+				String moveCommand = inFromClient.readLine();
+				if (moveCommand == null) break;
 
 				String[] parts = moveCommand.split(" ");
 				int dx = Integer.parseInt(parts[0]);
