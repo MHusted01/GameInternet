@@ -38,7 +38,12 @@ public class ServerThread extends Thread{
 			}
 		} catch (IOException e) {
 			GameLogic.elements.remove(player);
-			e.printStackTrace();
+            try {
+                GameLogic.updateClients();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            e.printStackTrace();
 		} catch (InterruptedException e) {
 			GameLogic.elements.remove(player);
             throw new RuntimeException(e);

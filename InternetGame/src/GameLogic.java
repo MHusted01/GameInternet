@@ -25,7 +25,6 @@ public class GameLogic {
 	public static void makeTreasure(){
 		Treasure t = new Treasure(getRandomFreePosition());
 		elements.add(t);
-		System.out.println(t);
 	}
 
 	public static pair getRandomFreePosition()
