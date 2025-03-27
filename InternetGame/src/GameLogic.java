@@ -120,39 +120,46 @@ public class GameLogic {
     }
 
 
-	public static synchronized void updateClients() throws IOException {
-		// Pak indhold af arraylist ned i en JSON
+	public static synchronized void updateClients() {
 		JSONArray jarrayP = new JSONArray();
 		JSONArray jarrayT = new JSONArray();
-		for (int i = 0; i < elements.size(); i++) {
-			if (elements.get(i) instanceof Player) {
+		ArrayList<Element> toRemove = new ArrayList<>();
+
+		for (Element e : elements) {
+			if (e instanceof Player) {
+				Player p = (Player) e;
 				JSONObject joP = new JSONObject();
-				joP.put("name", elements.get(i).getName());
-				joP.put("x", elements.get(i).getXpos());
-				joP.put("y", elements.get(i).getYpos());
-				joP.put("direction", elements.get(i).getDirection());
-				joP.put("point", elements.get(i).getPoint());
+				joP.put("name", p.getName());
+				joP.put("x", p.getXpos());
+				joP.put("y", p.getYpos());
+				joP.put("direction", p.getDirection());
+				joP.put("point", p.getPoint());
 				jarrayP.put(joP);
-			} else { // if element is a treasure
+			} else if (e instanceof Treasure) {
 				JSONObject joT = new JSONObject();
-				joT.put("x", elements.get(i).getXpos());
-				joT.put("y", elements.get(i).getYpos());
+				joT.put("x", e.getXpos());
+				joT.put("y", e.getYpos());
 				jarrayT.put(joT);
 			}
 		}
+
 		JSONObject jo = new JSONObject();
 		jo.put("Player", jarrayP);
 		jo.put("Treasure", jarrayT);
 		String s = jo.toString();
 
-		// lav forbindelse til server og send den skabte JSON
-		for (Element e : elements) {
-				if (e instanceof Player) {
-					Player player = (Player) e;
-					player.Update(s);
+		for (Element e : new ArrayList<>(elements)) {
+			if (e instanceof Player) {
+				try {
+					((Player) e).Update(s);
+				} catch (IOException ex) {
+					System.out.println("Fjerner spiller: " + e.getName());
+					toRemove.add(e);
 				}
 			}
+		}
 
+		elements.removeAll(toRemove);
 	}
 }
 
