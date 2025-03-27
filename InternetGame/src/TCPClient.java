@@ -17,7 +17,6 @@ public class TCPClient {
 		new ClientThread(clientSocket).start();
 
 		String navn = inFromServer.readLine();
-		System.out.println(navn);
 		outToServer.writeBytes(navn + "\n");
 
 		Application.launch(Gui.class);
