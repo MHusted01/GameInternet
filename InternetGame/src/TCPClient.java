@@ -12,7 +12,7 @@ public class TCPClient {
 		String sentence;
 		String modifiedSentence;
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(System.in));
-		Socket clientSocket= new Socket("10.10.131.31",6789);
+		Socket clientSocket= new Socket("localhost",6789);
 		outToServer = new DataOutputStream(clientSocket.getOutputStream());
 		new ClientThread(clientSocket).start();
 
