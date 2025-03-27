@@ -25,7 +25,17 @@ public class GameLogic {
 	public static void makeTreasure(){
 		Treasure t = new Treasure(getRandomFreePosition());
 		elements.add(t);
-		System.out.println(t);
+	}
+	public static boolean nameIsTaken(String name){
+		Boolean bool = false;
+		for (Element p : elements){
+			if (p instanceof Player){
+				if (((Player) p).name.equals(name)){
+					bool = true;
+				};
+			}
+		}
+		return bool;
 	}
 
 	public static pair getRandomFreePosition()
@@ -73,12 +83,12 @@ public class GameLogic {
 							pair pa = getRandomFreePosition();
 							e.setLocation(pa);
 							// Optional: Gui.movePlayerOnScreen(new pair(x + delta_x, y + delta_y), pa, p.direction);
-						}
-						if (e instanceof Treasure){
+						} else if (e instanceof Treasure){
 							player.addPoints(50);
-							System.out.println("test");
 							elements.remove(e);
 							makeTreasure();
+							pair newpos = new pair(x + delta_x, y + delta_y);
+							player.setLocation(newpos);
 						} else {
 							player.addPoints(1);
 							pair newpos = new pair(x + delta_x, y + delta_y);
@@ -110,7 +120,7 @@ public class GameLogic {
     }
 
 
-	public static void updateClients() throws IOException {
+	public static synchronized void updateClients() throws IOException {
 		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarrayP = new JSONArray();
 		JSONArray jarrayT = new JSONArray();
@@ -137,11 +147,12 @@ public class GameLogic {
 
 		// lav forbindelse til server og send den skabte JSON
 		for (Element e : elements) {
-			if (e instanceof Player) {
-				Player player = (Player) e;
-				player.Update(s);
+				if (e instanceof Player) {
+					Player player = (Player) e;
+					player.Update(s);
+				}
 			}
-		}
+
 	}
 }
 

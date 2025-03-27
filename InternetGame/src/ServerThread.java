@@ -20,8 +20,14 @@ public class ServerThread extends Thread{
 			System.out.println("tråd oprettet");
 			client.writeBytes("Hvad er dit navn?" + "\n");
 			String navn = inFromClient.readLine();
+			while(GameLogic.nameIsTaken(navn)){
+				client.writeBytes("Navn allered brugt - vælg nyt navn" + "\n");
+				navn = inFromClient.readLine();
+			}
 			System.out.println(navn + " Has joined");
+			client.writeBytes("You have joined" + "\n");
 			player = GameLogic.makePlayers(navn, client);
+
 			// Do the work and the communication with the client here
 			// The following two lines are only an example
 			sleep(2500);
@@ -38,7 +44,7 @@ public class ServerThread extends Thread{
 			}
 		} catch (IOException e) {
 			GameLogic.elements.remove(player);
-			e.printStackTrace();
+            e.printStackTrace();
 		} catch (InterruptedException e) {
 			GameLogic.elements.remove(player);
             throw new RuntimeException(e);

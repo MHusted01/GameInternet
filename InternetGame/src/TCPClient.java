@@ -14,10 +14,10 @@ public class TCPClient {
 		BufferedReader inFromServer = new BufferedReader(new InputStreamReader(System.in));
 		Socket clientSocket= new Socket("10.10.131.31",6789);
 		outToServer = new DataOutputStream(clientSocket.getOutputStream());
-
 		new ClientThread(clientSocket).start();
 
 		String navn = inFromServer.readLine();
+		System.out.println(navn);
 		outToServer.writeBytes(navn + "\n");
 
 		Application.launch(Gui.class);
