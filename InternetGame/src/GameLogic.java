@@ -68,7 +68,7 @@ public class GameLogic {
 						Element e = getElementAt(x + delta_x, y + delta_y);
 						if (e  instanceof Player) {
 							player.addPoints(10);
-							(Player) e.addPoints(-10);
+							((Player) e).addPoints(-10);
 							pair pa = getRandomFreePosition();
 							e.setLocation(pa);
 							// Optional: Gui.movePlayerOnScreen(new pair(x + delta_x, y + delta_y), pa, p.direction);
