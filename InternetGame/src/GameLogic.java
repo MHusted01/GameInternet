@@ -73,12 +73,12 @@ public class GameLogic {
 							pair pa = getRandomFreePosition();
 							e.setLocation(pa);
 							// Optional: Gui.movePlayerOnScreen(new pair(x + delta_x, y + delta_y), pa, p.direction);
-						}
-						if (e instanceof Treasure){
+						} else if (e instanceof Treasure){
 							player.addPoints(50);
-							System.out.println("test");
 							elements.remove(e);
 							makeTreasure();
+							pair newpos = new pair(x + delta_x, y + delta_y);
+							player.setLocation(newpos);
 						} else {
 							player.addPoints(1);
 							pair newpos = new pair(x + delta_x, y + delta_y);
@@ -105,7 +105,6 @@ public class GameLogic {
 					return (Treasure) p;
 				}
 			}
-			return null;
 		}
         return null;
     }
