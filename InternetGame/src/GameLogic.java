@@ -25,7 +25,6 @@ public class GameLogic {
 	public static void makeTreasure(){
 		Treasure t = new Treasure(getRandomFreePosition());
 		elements.add(t);
-		System.out.println(t);
 	}
 
 	public static pair getRandomFreePosition()
@@ -110,7 +109,7 @@ public class GameLogic {
     }
 
 
-	public static void updateClients() throws IOException {
+	public static synchronized void updateClients() throws IOException {
 		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarrayP = new JSONArray();
 		JSONArray jarrayT = new JSONArray();
