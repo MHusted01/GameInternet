@@ -110,7 +110,7 @@ public class GameLogic {
     }
 
 
-	public static void updateClients() throws IOException {
+	public static synchronized void updateClients() throws IOException {
 		// Pak indhold af arraylist ned i en JSON
 		JSONArray jarrayP = new JSONArray();
 		JSONArray jarrayT = new JSONArray();
@@ -137,11 +137,12 @@ public class GameLogic {
 
 		// lav forbindelse til server og send den skabte JSON
 		for (Element e : elements) {
-			if (e instanceof Player) {
-				Player player = (Player) e;
-				player.Update(s);
+				if (e instanceof Player) {
+					Player player = (Player) e;
+					player.Update(s);
+				}
 			}
-		}
+
 	}
 }
 
