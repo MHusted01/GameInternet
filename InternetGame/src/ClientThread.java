@@ -27,13 +27,7 @@ public class ClientThread extends Thread{
                 // Gennemløb JSON og skab Arrayliste med personer ud fra JSON
                 String s = inFromServer.readLine();
                 for (Element e : elements){
-                    if (e instanceof Player){
-                        System.out.println(e);
-                        Gui.removePlayerOnScreen(e.getLocation());
-                    }
-                    else { // element is treasure
-                        Gui.removeTreasureOnScreen(e.getLocation());
-                    }
+                        Gui.removeElementOnScreen(e.getLocation());
                 }
                 elements.clear();
                 JSONObject jo = new JSONObject(s);
@@ -49,17 +43,19 @@ public class ClientThread extends Thread{
                     Treasure t = new Treasure( new pair(js.getInt("x"), js.getInt("y")));
                     elements.add(t);
                 };
+
                 for (Element e : elements){{
+                    System.out.println(e);
                     if (e instanceof Player) {
                         Gui.placePlayerOnScreen(e.getLocation(),e.getDirection());
                     }
                     else {
-                        //Gui.placeTreasureOnScreen
+                        Gui.placeTreasureOnScreen(e.getLocation());
+                        //System.out.println("TREASURE PLACED");
                     }
                 }
                     Gui.updateScoreTable();
                 }
-
             }
         }
         catch (Exception e){

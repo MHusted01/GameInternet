@@ -11,8 +11,7 @@ public class Server {
 	public static void main(String[] args)throws Exception {
 
 		ArrayList<Player> players= new ArrayList<>();
-
-
+		GameLogic.makeTreasure();
 		ServerSocket welcomeSocket = new ServerSocket(6789);
 		while (true) {
 			Socket connectionSocket = welcomeSocket.accept();

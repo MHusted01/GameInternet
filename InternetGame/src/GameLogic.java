@@ -25,6 +25,7 @@ public class GameLogic {
 	public static void makeTreasure(){
 		Treasure t = new Treasure(getRandomFreePosition());
 		elements.add(t);
+		System.out.println(t);
 	}
 
 	public static pair getRandomFreePosition()
@@ -75,6 +76,7 @@ public class GameLogic {
 						}
 						if (e instanceof Treasure){
 							player.addPoints(50);
+							System.out.println("test");
 							elements.remove(e);
 							makeTreasure();
 						} else {
@@ -96,6 +98,11 @@ public class GameLogic {
 			if (p instanceof Player) {
 				if (p.getXpos() == x && p.getYpos() == y) {
 					return (Player) p;
+				}
+			}
+			if (p instanceof Treasure){
+				if (p.getXpos() == x && p.getYpos() == y) {
+					return (Treasure) p;
 				}
 			}
 			return null;

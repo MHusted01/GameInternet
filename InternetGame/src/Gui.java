@@ -20,6 +20,7 @@ public class Gui extends Application {
 	public static Image image_floor;
 	public static Image image_wall;
 	public static Image hero_right,hero_left,hero_up,hero_down;
+	public static Image treasure;
 
 	
 
@@ -61,6 +62,8 @@ public class Gui extends Application {
 			hero_left   = new Image(getClass().getResourceAsStream("Image/heroLeft.png"),size,size,false,false);
 			hero_up     = new Image(getClass().getResourceAsStream("Image/heroUp.png"),size,size,false,false);
 			hero_down   = new Image(getClass().getResourceAsStream("Image/heroDown.png"),size,size,false,false);
+
+			treasure = new Image(getClass().getResourceAsStream("Image/treasure.png"),size,size,false,false);
 
 			fields = new Label[20][20];
 			for (int j=0; j<20; j++) {
@@ -110,15 +113,10 @@ public class Gui extends Application {
 		}
 	}
 	
-	public static void removePlayerOnScreen(pair oldpos) {
+	public static void removeElementOnScreen(pair oldpos) {
 		Platform.runLater(() -> {
 			fields[oldpos.getX()][oldpos.getY()].setGraphic(new ImageView(image_floor));
 			});
-	}
-	public static void removeTreasureOnScreen(pair oldpos) {
-		Platform.runLater(() -> {
-			fields[oldpos.getX()][oldpos.getY()].setGraphic(new ImageView(image_floor));
-		});
 	}
 	
 	public static void placePlayerOnScreen(pair newpos,String direction) {
@@ -143,13 +141,13 @@ public class Gui extends Application {
 		Platform.runLater(() -> {
 			int newx = newpos.getX();
 			int newy = newpos.getY();
-
+			fields[newx][newy].setGraphic(new ImageView(treasure));
 		});
 	}
 	
 	public static void movePlayerOnScreen(pair oldpos,pair newpos,String direction)
 	{
-		removePlayerOnScreen(oldpos);
+		removeElementOnScreen(oldpos);
 		placePlayerOnScreen(newpos,direction);
 	}
 	
