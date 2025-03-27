@@ -47,7 +47,7 @@ public class ClientThread extends Thread{
                     if (e instanceof Player) {
                         Gui.placePlayerOnScreen(e.getLocation(),e.getDirection());
                     }
-                    else {
+                    if (e instanceof Treasure){
                         Gui.placeTreasureOnScreen(e.getLocation());
                     }
                 }
