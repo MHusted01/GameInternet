@@ -105,7 +105,6 @@ public class GameLogic {
 					return (Treasure) p;
 				}
 			}
-			return null;
 		}
         return null;
     }
