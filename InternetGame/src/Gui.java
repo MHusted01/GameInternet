@@ -45,7 +45,7 @@ public class Gui extends Application {
 			grid.setVgap(10);
 			grid.setPadding(new Insets(0, 10, 0, 10));
 
-			Text mazeLabel = new Text("Maze:");
+			Text mazeLabel = new Text("Treasure Hunters:");
 			mazeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 	
 			Text scoreLabel = new Text("Score:");
