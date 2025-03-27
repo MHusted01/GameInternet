@@ -136,11 +136,12 @@ public class GameLogic {
 
 		// lav forbindelse til server og send den skabte JSON
 		for (Element e : elements) {
-			if (e instanceof Player) {
-				Player player = (Player) e;
-				player.Update(s);
+				if (e instanceof Player) {
+					Player player = (Player) e;
+					player.Update(s);
+				}
 			}
-		}
+
 	}
 }
 

@@ -18,10 +18,25 @@ public class ServerThread extends Thread{
 			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connSocket.getInputStream()));
 			DataOutputStream client = new DataOutputStream(connSocket.getOutputStream());
 			System.out.println("tråd oprettet");
+			boolean navnLedig = false;
+			String navn = null;
 			client.writeBytes("Hvad er dit navn?" + "\n");
-			String navn = inFromClient.readLine();
+			navn = inFromClient.readLine();
+			while (!navnLedig) {
+				navnLedig = true;
+				for (Element element : GameLogic.elements) {
+					if (element instanceof Player) {
+						if (((Player) element).name.equals(navn)) {
+							client.writeBytes("Navn allerede valgt - vælg nyt navn" + "\n");
+							navn = inFromClient.readLine();
+							navnLedig = false;
+						}
+					}
+				}
+			}
 			System.out.println(navn + " Has joined");
 			player = GameLogic.makePlayers(navn, client);
+
 			// Do the work and the communication with the client here
 			// The following two lines are only an example
 			sleep(2500);
